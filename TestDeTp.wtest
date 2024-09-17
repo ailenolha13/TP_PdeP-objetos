@@ -1,0 +1,24 @@
+import TpObjetos.*
+
+describe "Tests de gandalf" {
+  test "Poder de Gandalf con toda la vida y todas sus armas" {
+    gandalf.vida(100)
+    assert.equals(2800, gandalf.poder())
+  }
+  test "Poder de Gandalf sin armas y con 80 de vida" {
+    gandalf.sacarArma(baston)
+    gandalf.sacarArma(espada)
+    gandalf.vida(80)
+    assert.equals(1200, gandalf.poder())
+  }
+  test "Poder de Gandalf con 5 de vida y su báculo" {
+    gandalf.sacarArma(espada)
+    gandalf.vida(5)
+    assert.equals(2300, gandalf.poder())
+  }
+  test "Poder de Gandalf con 30 de vida, su báculo y su espada pero versión enana" {
+    espada.tuOrigen("enano")
+    gandalf.vida(30)
+    assert.equals(1650, gandalf.poder())
+  }
+}
