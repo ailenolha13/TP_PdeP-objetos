@@ -1,5 +1,5 @@
 object gandalf {
-    var property vida = 0
+    var property vida = 100
     const property armas = #{baston,espada}
     method agregarArma(arma) {armas.add(arma) }
     method sacarArma(arma) {armas.remove(arma) }
@@ -34,4 +34,62 @@ object espada {
 
 object baston {
   var property poder = 400
+}
+
+// Recorriendo la Tierra Media
+
+// Zonas de la Tierra Media
+
+object lebennin {
+    const property poderRequerido = 1500
+
+    method atravesarZona(personaje) = personaje.poder() > poderRequerido
+    method recorrerZona(personaje) {
+        personaje
+    } 
+}
+
+object minasTirith {
+
+    method atravesarZona(personaje) =  personaje.armas().size() > 0 
+    method recorrerZona(personaje) {
+        personaje.vida() - 10
+    } 
+        
+}
+
+object lossarnach {
+    method atravesarZona(personaje) = true
+    method recorrerZona(personaje) {
+        personaje.vida() + 1
+    }
+}
+
+// object gondor {
+
+//     method atravesarZona(personaje) {
+//         if(zona )
+//     }
+// }
+
+
+// lebennin → poder > 1500 → OK
+// minas tirith → armas > 0 → OK
+// lossarnach → sinRequisitos → OK
+
+// zonas → lebennin → noPasaNada → OK
+//       → minas tirith → vida = vida - 10 → OK
+//       → lossarnach → vida = vida + 1 → OK
+
+
+// caminoGondor 
+// gondor → lebennin a minas tirith → poder > 1500 y armas > 0 → OK
+// gondor → noPasaNada y vida = vida - 10 → OK  
+
+
+//Tom Bombadil
+object tomBombadil {
+
+    method atravesarZona(zona) = true
+    method consecuenciaZona(zona) { }
 }

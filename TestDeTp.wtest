@@ -22,3 +22,44 @@ describe "Tests de gandalf" {
     assert.equals(1650, gandalf.poder())
   }
 }
+
+//Tests de Zonas y Caminos
+describe "Tests de zonas y caminos" {
+  test "gandalf full vida y con sus armas, puede atravesar Lebennin" {
+    gandalf.agregarArma(baston)
+    gandalf.agregarArma(espada)
+    gandalf.vida(100)
+    assert.equals(true, lebennin.atravesarZona(gandalf))
+  }
+  test "gandalf sin armas y con 11 de vida, puede atravesar Lebennin" {
+    gandalf.sacarArma(baston)
+    gandalf.sacarArma(espada)
+    gandalf.vida(11)
+    assert.equals(false, lebennin.atravesarZona(gandalf))
+  }
+  test "gandalf sin armas y con 11 de vida, puede atravesar Minas Tirith" {
+    gandalf.sacarArma(baston)
+    gandalf.sacarArma(espada)
+    gandalf.vida(11)
+    assert.equals(false, minasTirith.atravesarZona(gandalf))
+  }
+//   test "gandalf full vida y con sus armas, puede atravesar camino compuesto Lebennin-Minas Tirith" {
+//     gandalf.agregarArma(baston)
+//     gandalf.agregarArma(espada)
+//     gandalf.vida(100)
+    // assert.equals(true, gandalf.puedeAtravesarCamino(gondor))
+//   }s
+  test "gandalf full vida y con sus armas, puede atravesar camino compuesto Lebennin-Minas Tirith" {
+    gandalf.agregarArma(baston)
+    gandalf.agregarArma(espada)
+    gandalf.vida(90)
+    // assert.equals(true, gandalf.puedeAtravesarCamino(gondor))
+  }
+}
+
+// Tests de Tom:
+describe "Tests de Tom Bombadil" {
+  test "Tom puede atravesar Lebennin" {
+    assert.equals(true, tomBombadil.atravesarZona(lebennin))
+  }
+}
