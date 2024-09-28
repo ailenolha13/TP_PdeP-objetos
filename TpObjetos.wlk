@@ -65,13 +65,30 @@ object lossarnach {
     }
 }
 
-// object gondor {
+// Camino de Gondor
+// Conceptos utilzados:
+// Polimorfismo, abstracción, encapsulamiento, delegación 
+object gondor {
+    var zonaInicio = null
+    var zonaDestino = null
 
-//     method atravesarZona(personaje) {
-//         if(zona )
-//     }
-// }
+    method definirCamino(zona1, zona2) {
+        zonaInicio = zona1
+        zonaDestino = zona2
+    }
 
+    method puedeAtravesarZonas(personaje){
+        return zonaInicio.atravesarZona(personaje) && zonaDestino.atravesarZona(personaje)
+    }
+
+    method recorrerCamino(personaje) {
+      if (self.puedeAtravesarZonas(personaje)) {
+            zonaInicio.recorrerZona(personaje)
+            zonaDestino.recorrerZona(personaje)
+        }
+        return personaje
+    }
+}
 
 // lebennin → poder > 1500 → OK
 // minas tirith → armas > 0 → OK
@@ -81,11 +98,9 @@ object lossarnach {
 //       → minas tirith → vida = vida - 10 → OK
 //       → lossarnach → vida = vida + 1 → OK
 
-
 // caminoGondor 
 // gondor → lebennin a minas tirith → poder > 1500 y armas > 0 → OK
 // gondor → noPasaNada y vida = vida - 10 → OK  
-
 
 //Tom Bombadil
 object tomBombadil {
