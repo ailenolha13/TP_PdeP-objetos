@@ -1,5 +1,6 @@
 import TpObjetos.*
 
+//Test de Gandalf
 describe "Tests de gandalf" {
   test "Poder de Gandalf con toda la vida y todas sus armas" {
     gandalf.vida(100)

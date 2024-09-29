@@ -37,7 +37,8 @@ object baston {
   var property poder = 400
 }
 
-// En gandalf se utilizo colecciones, polimorfismo, delegacion, abstraccion y encapsulamiento
+// Conceptos utilizados:
+// colecciones, polimorfismo, delegacion, abstraccion y encapsulamiento
 
 // Recorriendo la Tierra Media
 
