@@ -43,17 +43,20 @@ describe "Tests de zonas y caminos" {
     gandalf.vida(11)
     assert.equals(false, minasTirith.atravesarZona(gandalf))
   }
-//   test "gandalf full vida y con sus armas, puede atravesar camino compuesto Lebennin-Minas Tirith" {
-//     gandalf.agregarArma(baston)
-//     gandalf.agregarArma(espada)
-//     gandalf.vida(100)
-    // assert.equals(true, gandalf.puedeAtravesarCamino(gondor))
-//   }s
-  test "gandalf full vida y con sus armas, puede atravesar camino compuesto Lebennin-Minas Tirith" {
+  test "Gandalf full vida y con sus armas, puede atravesar camino compuesto Lebennin-Minas Tirith" {
+    gandalf.agregarArma(baston)
+    gandalf.agregarArma(espada)
+    gandalf.vida(100)
+    gondor.definirCamino(lebennin, minasTirith)
+    assert.equals(true, gondor.puedeAtravesarZonas(gandalf))
+  }
+  test "Gandalf full vida y con sus armas, atraviesa el camino compuesto por Lebennin y Minas Tirith" {
     gandalf.agregarArma(baston)
     gandalf.agregarArma(espada)
     gandalf.vida(90)
-    // assert.equals(true, gandalf.puedeAtravesarCamino(gondor))
+    gondor.definirCamino(lebennin, minasTirith)
+    gondor.recorrerCamino(gandalf)
+    assert.equals(90, gandalf.vida)
   }
 }
 
