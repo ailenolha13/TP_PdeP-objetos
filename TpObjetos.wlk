@@ -40,10 +40,10 @@ object baston {
 // Conceptos utilizados:
 // colecciones, polimorfismo, delegacion, abstraccion y encapsulamiento
 
+
 // Recorriendo la Tierra Media
-
 // Zonas de la Tierra Media
-
+//Conceptos utilizados: encapsulamiento, abstracción, polimorfismo y delegación 
 object lebennin {
     const property poderRequerido = 1500
 
@@ -94,21 +94,13 @@ object gondor {
     }
 }
 
-// lebennin → poder > 1500 → OK
-// minas tirith → armas > 0 → OK
-// lossarnach → sinRequisitos → OK
-
-// zonas → lebennin → noPasaNada → OK
-//       → minas tirith → vida = vida - 10 → OK
-//       → lossarnach → vida = vida + 1 → OK
-
-// caminoGondor 
-// gondor → lebennin a minas tirith → poder > 1500 y armas > 0 → OK
-// gondor → noPasaNada y vida = vida - 10 → OK  
-
 //Tom Bombadil
-object tomBombadil {
+//Conceptos utilizados: polimorfismo, abstracción, encapsulamiento
+object tomBombadil { 
+    method vida() = 100
+    method poder() = 10000 
+    method armas() = #{}
 
     method atravesarZona(zona) = true
-    method consecuenciaZona(zona) { }
+    method consecuenciaZona(zona) = false
 }
