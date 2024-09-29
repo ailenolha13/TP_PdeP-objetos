@@ -13,28 +13,31 @@ object gandalf {
 }
 
 object espada {
-  var property poder = 0
-  var property origen = 25
+  var property origen = "elfico"
   
   method poder() {
-    return origen*10
+    return self.tuOrigen(origen)*10
   }
 
   method tuOrigen(unOrigen) {
     if (unOrigen=="elfico")
-    origen = 25
+    return 25
     else
     if (unOrigen=="enano")
-    origen = 20
+    return 20
     else
     if (unOrigen=="humano")
-    origen = 15
+    return 15
+    else
+    return
   }
 }
 
 object baston {
   var property poder = 400
 }
+
+// En gandalf se utilizo colecciones, polimorfismo, delegacion, abstraccion y encapsulamiento
 
 // Recorriendo la Tierra Media
 
