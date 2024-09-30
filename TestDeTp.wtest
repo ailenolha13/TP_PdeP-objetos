@@ -66,4 +66,19 @@ describe "Tests de Tom Bombadil" {
   test "Tom puede atravesar Lebennin" {
     assert.equals(true, tomBombadil.atravesarZona(lebennin))
   }
+  test "Tom atraviesa el camino de Gondor (Lebennin a Minas Tirith)" {
+    gondor.definirCamino(lebennin, minasTirith)
+    gondor.recorrerCamino(tomBombadil)
+    assert.equals(false, tomBombadil.consecuenciaZona(gondor))
+  }
+  test "Tom atraviesa el camino de Gondor (Lebennin a Lossarnach)" {
+    gondor.definirCamino(lebennin, lossarnach)
+    gondor.recorrerCamino(tomBombadil)
+    assert.equals(false, tomBombadil.consecuenciaZona(gondor))
+  }
+    test "Tom atraviesa el camino de Gondor (Lossarnach a Minas Tirith)" {
+    gondor.definirCamino(lossarnach, minasTirith)
+    gondor.recorrerCamino(tomBombadil)
+    assert.equals(false, tomBombadil.consecuenciaZona(gondor))
+  }  
 }
