@@ -11,7 +11,6 @@ object gandalf {
         {return vida*300 + 2*self.poderArmas()}
     }
 }
-
 object espada {
   
   var property origen = elfico
