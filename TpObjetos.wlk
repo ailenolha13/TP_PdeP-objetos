@@ -1,8 +1,8 @@
 object gandalf {
     var property vida = 100
     const property armas = #{baston,espada}
-    method agregarArma(arma) {armas.add(arma) }
-    method sacarArma(arma) {armas.remove(arma) }
+    method agregarArma(arma) {armas.add(arma)}
+    method sacarArma(arma) {armas.remove(arma)}
     method poderArmas() = (armas.sum({arma=> arma.poder()}))
     method poder() {
         if (vida>10)
@@ -13,24 +13,20 @@ object gandalf {
 }
 
 object espada {
-  var property origen = "elfico"
   
-  method poder() {
-    return self.tuOrigen(origen)*10
-  }
+  var property origen = elfico
+  method poder() = origen.poderOriginal()*10
+  
+}
 
-  method tuOrigen(unOrigen) {
-    if (unOrigen=="elfico")
-    return 25
-    else
-    if (unOrigen=="enano")
-    return 20
-    else
-    if (unOrigen=="humano")
-    return 15
-    else
-    return
-  }
+object elfico {
+  var property poderOriginal = 25
+}
+object enano {
+  var property poderOriginal = 20
+}
+object humano {
+  var property poderOriginal = 15
 }
 
 object baston {

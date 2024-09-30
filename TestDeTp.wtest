@@ -18,7 +18,7 @@ describe "Tests de gandalf" {
     assert.equals(2300, gandalf.poder())
   }
   test "Poder de Gandalf con 30 de vida, su báculo y su espada pero versión enana" {
-    espada.origen("enano")
+    espada.origen(enano)
     gandalf.vida(30)
     assert.equals(1650, gandalf.poder())
   }
