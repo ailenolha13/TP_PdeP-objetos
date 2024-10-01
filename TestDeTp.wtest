@@ -53,10 +53,9 @@ describe "Tests de zonas y caminos" {
   test "Gandalf full vida y con sus armas, atraviesa el camino compuesto por Lebennin y Minas Tirith" {
     gandalf.agregarArma(baston)
     gandalf.agregarArma(espada)
-    gandalf.vida(90)
     gondor.definirCamino(lebennin, minasTirith)
     gondor.recorrerCamino(gandalf)
-    assert.equals(90, gandalf.vida)
+    assert.equals(90, gandalf.vida())
   }
 }
 

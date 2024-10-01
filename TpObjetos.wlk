@@ -43,24 +43,21 @@ object lebennin {
     const property poderRequerido = 1500
 
     method atravesarZona(personaje) = personaje.poder() > poderRequerido
-    method recorrerZona(personaje) {
-        personaje
-    } 
+    method recorrerZona(personaje) {}
 }
 
 object minasTirith {
 
     method atravesarZona(personaje) =  personaje.armas().size() > 0 
     method recorrerZona(personaje) {
-        personaje.vida() - 10
+        personaje.vida(personaje.vida()-10)
     } 
-        
 }
 
 object lossarnach {
     method atravesarZona(personaje) = true
     method recorrerZona(personaje) {
-        personaje.vida() + 1
+        personaje.vida(personaje.vida()+1)
     }
 }
 
@@ -85,7 +82,6 @@ object gondor {
             zonaInicio.recorrerZona(personaje)
             zonaDestino.recorrerZona(personaje)
         }
-        return personaje
     }
 }
 
