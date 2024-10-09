@@ -19,7 +19,7 @@ object espada {
 }
 
 object elfico {
-  var property poderOriginal = 25
+  var property poderOriginal = 30
 }
 object enano {
   var property poderOriginal = 20
@@ -88,10 +88,93 @@ object gondor {
 //Tom Bombadil
 //Conceptos utilizados: polimorfismo, abstracción, encapsulamiento
 object tomBombadil { 
-    method vida() = 100
+    var property vida = 100
     method poder() = 10000 
     method armas() = #{}
 
     method atravesarZona(zona) = true
     method consecuenciaZona(zona) = false
 }
+
+// Parte 2
+
+class Espada {
+  var property multiplicador = 0
+  var property origen = elfico
+  method poder() = origen.poderOriginal()*multiplicador
+}
+
+class Baculo {
+  var property poder = 0
+}
+
+class Daga inherits Espada {
+  override method poder() {
+    return (origen.poderOriginal()*multiplicador)/2
+  }
+}
+
+class Arco {
+  var property tension = 40
+  var property longitud = 0
+  method aumentarTension(aumento) {tension = tension + aumento}
+  method reducirTension(reduccion) {tension = tension - reduccion}
+  method poder() = (tension*longitud)/10
+}
+
+class Hacha {
+  var property largo = 0
+  var property peso = 0
+  method poder() = largo*peso
+}
+//Conceptos utilizados:
+// Clases, SuperClases, delegacion, abstraccion, encapsulamiento y polimorfismo
+
+class Guerrero {
+  var property vida = 0
+  var property armas = #{}
+  method poderArmas() = (armas.sum({arma=> arma.poder()}))
+}
+class Hobbit inherits Guerrero {
+  var property items = #{}
+  method cantItems() = (items.size())
+  method poder() = vida+self.poderArmas()+self.cantItems()
+}
+
+class Enano inherits Guerrero {
+  var property factor = 0
+  method poder() = vida+self.poderArmas()*factor
+}
+
+class Elfo inherits Guerrero {
+  var property destrezaBase = 2
+  method aumentarDestrezaBase(aumento) {destrezaBase = destrezaBase + aumento}
+  method reducirDestrezaBase(reduccion) {destrezaBase = destrezaBase - reduccion}
+  var property destrezaPropia = 0
+  method aumentarDestrezaPropia(aumento) {destrezaPropia = destrezaPropia + aumento}
+  method reducirDestrezapropia(reduccion) {destrezaBase = destrezaPropia - reduccion}
+  method poder() = vida+self.poderArmas()*(destrezaBase+destrezaPropia)
+}
+
+class Humano inherits Guerrero {
+  var property limitador = 0
+  method poder() = vida*self.poderArmas()/limitador
+}
+
+class Maiar inherits Guerrero {
+  var property factorBasico = 15
+  var property factorBajoAmenaza = 300
+  method poder() {
+        if (vida>10)
+        {return vida*factorBasico + 2*self.poderArmas()}
+        else
+        {return vida*factorBajoAmenaza + 2*self.poderArmas()}
+    }
+}
+
+object gollum inherits Hobbit {
+  override method poder() = (vida+self.poderArmas()+items/2)
+}
+
+//Conceptos utilizados:
+// Clases, SuperClases, delegacion, abstraccion, encapsulamiento y polimorfismo

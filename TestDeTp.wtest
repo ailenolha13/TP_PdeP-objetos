@@ -3,7 +3,7 @@ import TpObjetos.*
 describe "Tests de gandalf" {
   test "Poder de Gandalf con toda la vida y todas sus armas" {
     gandalf.vida(100)
-    assert.equals(2800, gandalf.poder())
+    assert.equals(2900, gandalf.poder())
   }
   test "Poder de Gandalf sin armas y con 80 de vida" {
     gandalf.sacarArma(baston)
@@ -79,4 +79,71 @@ describe "Tests de Tom Bombadil" {
     gondor.recorrerCamino(tomBombadil)
     assert.equals(false, tomBombadil.consecuenciaZona(gondor))
   }  
+}
+
+ // Arcos
+  const arco1 = new Arco(longitud = 110)
+  // Hachas
+  const hacha1 = new Hacha(largo=50,peso=5)
+  const hacha2 = new Hacha(largo=70,peso=5)
+  // Dagas
+  const daga1 = new Daga(multiplicador=15,origen=enano)
+  const daga2 = new Daga(multiplicador=10,origen=enano)
+  // Espadas
+  const espada1 = new Espada(multiplicador=15,origen=enano)
+  const espada2 = new Espada(multiplicador=8)
+  const espada3 = new Espada(multiplicador=12)
+  const anduril = new Espada(multiplicador=18)
+  const glamdring = new Espada(multiplicador=10)
+  // Baculos
+  const baculo1 = new Baculo(poder=400)
+  // Guerreros
+  const frodo = new Hobbit(vida=60,armas=#{espada2})
+  const gimil = new Enano(vida=75,armas=[hacha2,hacha2],factor=3)
+  const legolas = new Elfo(vida=80,armas=#{arco1,espada3},destrezaPropia=1)
+  const aragorn = new Humano(vida=85,armas=#{anduril,daga2},limitador=20)
+  const _gandalf = new Maiar(vida=100,armas=#{glamdring,baculo1})
+
+describe "Test de armas" {
+  test "Espada con multiplicador de 15 y de origen Enano" {
+    assert.equals(300, espada1.poder())
+  }
+  test "Daga con multiplicador de 15 y origen Enano" {
+    assert.equals(150, daga1.poder())
+  }
+  test "Hacha con mango de 50 cm, con una hoja de 5kg" {
+    assert.equals(250, hacha1.poder())
+  }
+  test "Arco con longitud de 110cm" {
+    assert.equals(440, arco1.poder())
+  }
+  test "Modificar la tensión del arco a 35kg. Mismo arco que antes…" {
+    arco1.reducirTension(5)
+    assert.equals(385, arco1.poder())
+  }
+}
+describe "Test de Guerreros" {
+  test "Poder de Frodo" {
+    assert.equals(300, frodo.poder())
+  }
+  test "Poder de Gimil" {
+    assert.equals(2175, gimil.poder())
+  }
+  test "poder de Legolas" {
+    assert.equals(2480, legolas.poder())
+  }
+  test "poder de Aragorn" {
+    assert.equals(2720, aragorn.poder())
+  }
+  test "poder de Gandalf" {
+    assert.equals(2900, _gandalf.poder())
+  }
+  test "Gandalf con 10 de vida, y todas sus armas" {
+    _gandalf.vida(10)
+    assert.equals(4400, _gandalf.poder())
+  }
+  test "Poder de Légolas que obtiene medio punto de destreza propia" {
+    legolas.aumentarDestrezaPropia(0.5)
+    assert.equals(2880, legolas.poder())
+  }
 }
