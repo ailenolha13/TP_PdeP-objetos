@@ -1,6 +1,9 @@
 object gandalf {
     var property vida = 100
     const property armas = #{baston,espada}
+    method tieneArmas() {
+        return armas.size() > 0
+    }
     method agregarArma(arma) {armas.add(arma)}
     method sacarArma(arma) {armas.remove(arma)}
     method poderArmas() = (armas.sum({arma=> arma.poder()}))
@@ -48,7 +51,7 @@ object lebennin {
 
 object minasTirith {
 
-    method atravesarZona(personaje) =  personaje.armas().size() > 0 
+    method atravesarZona(personaje) =  personaje.tieneArmas()
     method recorrerZona(personaje) {
         personaje.vida(personaje.vida()-10)
     } 
@@ -78,7 +81,7 @@ object gondor {
     }
 
     method recorrerCamino(personaje) {
-      if (self.puedeAtravesarZonas(personaje)) {
+        if (self.puedeAtravesarZonas(personaje)) {
             zonaInicio.recorrerZona(personaje)
             zonaDestino.recorrerZona(personaje)
         }
@@ -91,7 +94,9 @@ object tomBombadil {
     var property vida = 100
     method poder() = 10000 
     method armas() = #{}
-
+    method tieneArmas() {
+        return self.armas() > 0
+    }
     method atravesarZona(zona) = true
     method consecuenciaZona(zona) = false
 }
