@@ -183,3 +183,101 @@ object gollum inherits Hobbit {
 
 //Conceptos utilizados:
 // Clases, SuperClases, delegacion, abstraccion, encapsulamiento y polimorfismo
+
+//Los caminos de la tierra media
+
+class GrupoGuerreros {
+    var property guerreros = #{} 
+
+    method cantidadItems(item) {
+        // return guerreros.sum(guerrero => guerrero.items().count(it == item))
+    } 
+}
+
+// Modelo region y zona
+class Region {
+    var property nombre 
+    var property zonas = #{} 
+    
+    //Get nombre
+    method nombre() {
+      return nombre
+    }
+
+    //Set nombre
+    method nombre(_nombre) { 
+        nombre = _nombre
+    }
+
+    method agregarZona(_zona) {
+        zonas.add(_zona)
+    }
+}
+
+class Zona {
+    var property nombre
+    var property requerimiento 
+
+    //Get nombre zona
+    method nombre() {
+      return nombre
+    }
+
+    //Set nombre zona
+    method nombre(_nombre) { 
+        nombre = _nombre
+    }
+
+    method asignarRequerimiento(_requerimiento) = _requerimiento
+}
+
+//Modelos de requerimientos
+class RequerimientoItem {
+    var property cantidad
+    var property nombre  
+
+    //Get cantidad
+    method cantidad() {
+        return cantidad
+    }
+
+    //Set cantidad
+    method cantidad(_cantidad) {
+        cantidad = _cantidad
+    }
+
+    //Get nombre 
+    method nombre() {
+        return nombre 
+    } 
+
+    //Set nombre
+    method nombre(_nombre) {
+        nombre = _nombre
+    }
+
+}
+
+class RequerimientoGuerrero {
+    var property criterio
+
+    //Get criterio
+    method criterio() {
+        return criterio
+    } 
+
+    //Set criterio
+    method criterio(_criterio) {
+        criterio = _criterio
+    }
+
+}
+
+//Modelo caminos
+class Camino {
+    var property zonas = []
+
+    method recorreZona(_zona) {
+        zonas.add(_zona) 
+    }
+}
