@@ -137,12 +137,15 @@ class Hacha {
 
 class Guerrero {
   var property vida = 0
-  var property armas = #{}
+  var property armas = []
+  var property items = [] 
   method poderArmas() = (armas.sum({arma=> arma.poder()}))
-}
-class Hobbit inherits Guerrero {
-  var property items = #{}
   method cantItems() = (items.size())
+  method obtenerCantidadItemIGuales(itemAEvaluar) = items.filter({ 
+    item => item == itemAEvaluar }).size()
+}
+
+class Hobbit inherits Guerrero {
   method poder() = vida+self.poderArmas()+self.cantItems()
 }
 
@@ -185,99 +188,64 @@ object gollum inherits Hobbit {
 // Clases, SuperClases, delegacion, abstraccion, encapsulamiento y polimorfismo
 
 //Los caminos de la tierra media
-
 class GrupoGuerreros {
     var property guerreros = #{} 
-
-    method cantidadItems(item) {
-        // return guerreros.sum(guerrero => guerrero.items().count(it == item))
-    } 
+    var property caminosRecorridos = [] 
+    
+    // method agregarGuerrero(guerrero) = guerreros.add(guerrero)
+    
+    method obtenerCantidadTotalItem(itemAEvaluar) = guerreros.sum({ 
+        guerrero => guerrero.obtenerCantidadItemIGuales(itemAEvaluar)})
+    
+    // method recorrerCaminos(camino) = caminosRecorridos.add(camino)
 }
 
 // Modelo region y zona
 class Region {
     var property nombre 
     var property zonas = #{} 
-    
-    //Get nombre
-    method nombre() {
-      return nombre
-    }
 
-    //Set nombre
-    method nombre(_nombre) { 
-        nombre = _nombre
-    }
-
-    method agregarZona(_zona) {
-        zonas.add(_zona)
-    }
+    // method agregarZona(_zona) = zonas.add(_zona)
 }
 
 class Zona {
     var property nombre
-    var property requerimiento 
-
-    //Get nombre zona
-    method nombre() {
-      return nombre
-    }
-
-    //Set nombre zona
-    method nombre(_nombre) { 
-        nombre = _nombre
-    }
+    var property requerimiento = null
+    var region  
 
     method asignarRequerimiento(_requerimiento) = _requerimiento
+
+    method region(_region) { region = _region }
 }
 
 //Modelos de requerimientos
 class RequerimientoItem {
     var property cantidad
     var property nombre  
-
-    //Get cantidad
-    method cantidad() {
-        return cantidad
-    }
-
-    //Set cantidad
-    method cantidad(_cantidad) {
-        cantidad = _cantidad
-    }
-
-    //Get nombre 
-    method nombre() {
-        return nombre 
-    } 
-
-    //Set nombre
-    method nombre(_nombre) {
-        nombre = _nombre
-    }
-
 }
 
 class RequerimientoGuerrero {
     var property criterio
-
-    //Get criterio
-    method criterio() {
-        return criterio
-    } 
-
-    //Set criterio
-    method criterio(_criterio) {
-        criterio = _criterio
-    }
-
 }
 
 //Modelo caminos
 class Camino {
     var property zonas = []
 
-    method recorreZona(_zona) {
-        zonas.add(_zona) 
+    // method agregarZona(_zona) = zonas.add(_zona)
+}
+
+//Requerimientos de guerreros
+object poderMilQuinientos {
+    var property requerimientoPoder = 1500
+
+    method evaluarRequerimiento(grupoGuerreros) {
+        grupoGuerreros.find({ guerrero => guerrero.poder() == 1500 })
     }
+}
+
+object tieneArmas {
+    method tieneArmas(grupoGuerreros) {
+      grupoGuerreros.find({ guerrero => guerrero.armas().size() > 0 })
+    } 
 }

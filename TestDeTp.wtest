@@ -98,11 +98,11 @@ describe "Tests de Tom Bombadil" {
   // Baculos
   const baculo1 = new Baculo(poder=400)
   // Guerreros
-  const frodo = new Hobbit(vida=60,armas=#{espada2})
+  const frodo = new Hobbit(vida=60,armas=[espada2])
   const gimil = new Enano(vida=75,armas=[hacha2,hacha2],factor=3)
-  const legolas = new Elfo(vida=80,armas=#{arco1,espada3},destrezaPropia=1)
-  const aragorn = new Humano(vida=85,armas=#{anduril,daga2},limitador=20)
-  const _gandalf = new Maiar(vida=100,armas=#{glamdring,baculo1})
+  const legolas = new Elfo(vida=80,armas=[arco1,espada3],destrezaPropia=1)
+  const aragorn = new Humano(vida=85,armas=[anduril,daga2],limitador=20)
+  const _gandalf = new Maiar(vida=100,armas=[glamdring,baculo1])
 
 describe "Test de armas" {
   test "Espada con multiplicador de 15 y de origen Enano" {
@@ -145,5 +145,33 @@ describe "Test de Guerreros" {
   test "Poder de Légolas que obtiene medio punto de destreza propia" {
     legolas.aumentarDestrezaPropia(0.5)
     assert.equals(2880, legolas.poder())
+  }
+}
+
+//Requerimientos Gondor
+const diezLembas = new RequerimientoItem(cantidad = 10, nombre = "Lembas") 
+//Region Gondor
+const gondorRegion = new Region(nombre = "Gondor")
+//Zona Gondor
+const belfalasZona = new Zona(nombre = "Belfalas", region = gondorRegion)
+const lebenninZona = new Zona(nombre = "Lebennin", requerimiento = poderMilQuinientos, region = gondorRegion)
+const minasTirithZona = new Zona(nombre = "Minas Tirith", requerimiento = diezLembas, 
+region = gondorRegion)
+
+//Requerimientos Rohan
+const tresCapasElficas = new RequerimientoItem(cantidad = 3, nombre = "Capas Elficas") 
+//Region Rohan
+const rohanRegion = new Region(nombre = "Rohan")
+//Zona Rohan
+const bosqueDeFangornZona = new Zona(nombre = "Bosque de Fangorn", requerimiento = tieneArmas, region = rohanRegion)
+const edorasZona = new Zona(nombre = "Edoras", region = rohanRegion)
+const estemnetZona = new Zona(nombre = "Estemnet", requerimiento = tresCapasElficas, region = rohanRegion)
+
+//Camino
+const camino = new Camino(zonas = [bosqueDeFangornZona, edorasZona, belfalasZona, minasTirithZona])
+
+describe "Tests de Caminos" {
+  test "Un grupo no puede pasar por una zona por requerimiento de item" {
+
   }
 }
