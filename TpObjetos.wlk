@@ -198,6 +198,7 @@ class GrupoGuerreros {
         guerrero => guerrero.obtenerCantidadItemIGuales(itemAEvaluar)})
     
     // method recorrerCaminos(camino) = caminosRecorridos.add(camino)
+    // method puedeAtravesarCamino(camino) = camino.zonas().all({ zona => zona.puedePasarZona(self)})
 }
 
 // Modelo region y zona
@@ -210,22 +211,28 @@ class Region {
 
 class Zona {
     var property nombre
-    var property requerimiento = null
+    var property requerimiento 
     var region  
 
-    method asignarRequerimiento(_requerimiento) = _requerimiento
+    // method asignarRequerimiento(_requerimiento) = _requerimiento
 
     method region(_region) { region = _region }
 }
 
-//Modelos de requerimientos
-class RequerimientoItem {
-    var property cantidad
-    var property nombre  
+//Modelos Requerimientos
+class Requerimiento {
+    //0: sin requerimientos; 1: requerimiento item; 2: requerimiento guerrero
+    var property tipoRequerimiento = 0  
+  
 }
 
-class RequerimientoGuerrero {
-    var property criterio
+
+//Modelos Requerimiento Item
+class RequerimientoItem inherits Requerimiento { 
+    var property cantidad
+    var property nombre  
+
+    override method tipoRequerimiento() = 1
 }
 
 //Modelo caminos
@@ -235,17 +242,23 @@ class Camino {
     // method agregarZona(_zona) = zonas.add(_zona)
 }
 
-//Requerimientos de guerreros
-object poderMilQuinientos {
-    var property requerimientoPoder = 1500
+// Requerimientos de guerreros
+object poderMilQuinientos inherits Requerimiento {
+    const requerimientoPoder = 1500
 
-    method evaluarRequerimiento(grupoGuerreros) {
-        grupoGuerreros.find({ guerrero => guerrero.poder() == 1500 })
+    override method tipoRequerimiento() = 2
+
+    method evaluarRequerimiento(grupoGuerreros) { 
+        grupoGuerreros.filter({ guerrero => guerrero.poder() == requerimientoPoder })
     }
 }
 
-object tieneArmas {
+object tieneArmas inherits Requerimiento {
+
+    override method tipoRequerimiento() = 2
+
     method tieneArmas(grupoGuerreros) {
       grupoGuerreros.find({ guerrero => guerrero.armas().size() > 0 })
     } 
 }
+

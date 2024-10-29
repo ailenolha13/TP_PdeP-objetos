@@ -78,7 +78,7 @@ describe "Tests de Tom Bombadil" {
     gondor.definirCamino(lossarnach, minasTirith)
     gondor.recorrerCamino(tomBombadil)
     assert.equals(false, tomBombadil.consecuenciaZona(gondor))
-  }  
+  }
 }
 
  // Arcos
@@ -148,30 +148,65 @@ describe "Test de Guerreros" {
   }
 }
 
-//Requerimientos Gondor
-const diezLembas = new RequerimientoItem(cantidad = 10, nombre = "Lembas") 
+//Sin Requerimientos
+const sinRequerimiento = new Requerimiento()
+
+//Requerimientos Item: Gondor
+const diezLembas = new RequerimientoItem(cantidad = 10, nombre = "Lembas")
 //Region Gondor
 const gondorRegion = new Region(nombre = "Gondor")
 //Zona Gondor
-const belfalasZona = new Zona(nombre = "Belfalas", region = gondorRegion)
+const belfalasZona = new Zona(nombre = "Belfalas", requerimiento = sinRequerimiento, region = gondorRegion)
 const lebenninZona = new Zona(nombre = "Lebennin", requerimiento = poderMilQuinientos, region = gondorRegion)
-const minasTirithZona = new Zona(nombre = "Minas Tirith", requerimiento = diezLembas, 
+const minasTirithZona = new Zona(nombre = "Minas Tirith", requerimiento = diezLembas,
 region = gondorRegion)
 
-//Requerimientos Rohan
-const tresCapasElficas = new RequerimientoItem(cantidad = 3, nombre = "Capas Elficas") 
+//Requerimientos Item: Rohan
+const tresCapasElficas = new RequerimientoItem(cantidad = 3, nombre = "Capas Elficas")
 //Region Rohan
 const rohanRegion = new Region(nombre = "Rohan")
 //Zona Rohan
 const bosqueDeFangornZona = new Zona(nombre = "Bosque de Fangorn", requerimiento = tieneArmas, region = rohanRegion)
-const edorasZona = new Zona(nombre = "Edoras", region = rohanRegion)
+const edorasZona = new Zona(nombre = "Edoras", requerimiento = sinRequerimiento, region = rohanRegion)
 const estemnetZona = new Zona(nombre = "Estemnet", requerimiento = tresCapasElficas, region = rohanRegion)
 
 //Camino
 const camino = new Camino(zonas = [bosqueDeFangornZona, edorasZona, belfalasZona, minasTirithZona])
 
+// Guerreros
+const frodo1 = new Hobbit(vida=60,armas=[espada2], items=["Lembas","Lembas", "Capas Elficas", "Anillo Unico", "Hoja de Lorien", "Cota de Mithrill"])
+const gimil1 = new Enano(vida=75,armas=[hacha2,hacha2],factor=3, items=["Lembas", "Capas Elficas", "Lembas"])
+const legolas1 = new Elfo(vida=80,armas=[arco1,espada3],destrezaPropia=1, items=["Lembas", "Capas Elficas", "Lembas","Lembas"])
+const aragorn1 = new Humano(vida=85,armas=[anduril,daga2],limitador=20, items=["Lembas", "Capas Elficas", "Anillo Barahir", "Lembas", "Estrella del Atardecer"])
+const _gandalf1 = new Maiar(vida=100,armas=[glamdring,baculo1], items=["Capas Elficas", "Lembas", "Mapa Thor", "Anillo Rojo", "Lembas"])
+
+//Grupo de guerreros
+const grupoGuerreros1 = new GrupoGuerreros(guerreros = [frodo1, gimil1, legolas1, aragorn1], caminosRecorridos = camino)
+const grupoGuerreros2 = new GrupoGuerreros(guerreros = [_gandalf1], caminosRecorridos = camino)
+const grupoGuerreros3 = new GrupoGuerreros(guerreros = [frodo1, gimil1, legolas1, aragorn1, _gandalf1], caminosRecorridos = camino)
+
+
 describe "Tests de Caminos" {
   test "Un grupo no puede pasar por una zona por requerimiento de item" {
-
+    assert.equals(false, grupoGuerreros1.obtenerCantidadTotalItem(minasTirithZona.requerimiento().nombre()) > minasTirithZona.requerimiento().cantidad())
   }
+
+//    test "Un grupo no puede pasar por una zona por requerimiento de guerrero" {
+//     const puedePasarLebennin = lebenninZona.requerimiento().evaluarRequerimiento(grupoGuerreros2)
+//     assert.equals(false, puedePasarLebennin.isEmpty())
+//   }
+
+//    test "Un grupo no puede pasar por una zona por requerimiento de guerrero" {
+//     assert.equals(false, lebenninZona.requerimiento().evaluarPoder(1500))
+//   }
+
+   test "Un grupo puede pasar por una zona" {
+    assert.equals(true, edorasZona.requerimiento().tipoRequerimiento() == 0)
+  }
+
+//   test "Un grupo no puede atravesar un camino" {
+//   }
+
+//   test "Un grupo puede atravesar un camino" {
+//   }
 }
