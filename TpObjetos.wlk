@@ -193,9 +193,15 @@ class GrupoGuerreros {
     var property caminosRecorridos = [] 
     
     // method agregarGuerrero(guerrero) = guerreros.add(guerrero)
-    
+
     method obtenerCantidadTotalItem(itemAEvaluar) = guerreros.sum({ 
         guerrero => guerrero.obtenerCantidadItemIGuales(itemAEvaluar)})
+    
+    method grupoAptoParaLebennin() = guerreros.any({
+      guerrero => guerrero.poder() == poderMilQuinientos.obtenerRequerimientoPoder()
+      }
+      )
+           
     
     // method recorrerCaminos(camino) = caminosRecorridos.add(camino)
     // method puedeAtravesarCamino(camino) = camino.zonas().all({ zona => zona.puedePasarZona(self)})
@@ -246,6 +252,8 @@ class Camino {
 object poderMilQuinientos inherits Requerimiento {
     const requerimientoPoder = 1500
 
+    method obtenerRequerimientoPoder() = 1500
+
     override method tipoRequerimiento() = 2
 
     method evaluarRequerimiento(grupoGuerreros) { 
@@ -261,4 +269,3 @@ object tieneArmas inherits Requerimiento {
       grupoGuerreros.find({ guerrero => guerrero.armas().size() > 0 })
     } 
 }
-
