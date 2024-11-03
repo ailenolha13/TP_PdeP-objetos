@@ -201,7 +201,10 @@ class GrupoGuerreros {
       guerrero => guerrero.poder() == poderMilQuinientos.obtenerRequerimientoPoder()
       }
       )
-           
+
+    method grupoAptoParabosqueDeFangorn() = guerreros.any({
+      guerrero => guerrero.armas().size() > 0 }
+      )
     
     // method recorrerCaminos(camino) = caminosRecorridos.add(camino)
     // method puedeAtravesarCamino(camino) = camino.zonas().all({ zona => zona.puedePasarZona(self)})
@@ -250,14 +253,13 @@ class Camino {
 
 // Requerimientos de guerreros
 object poderMilQuinientos inherits Requerimiento {
-    const requerimientoPoder = 1500
 
     method obtenerRequerimientoPoder() = 1500
 
     override method tipoRequerimiento() = 2
 
     method evaluarRequerimiento(grupoGuerreros) { 
-        grupoGuerreros.filter({ guerrero => guerrero.poder() == requerimientoPoder })
+      return grupoGuerreros.grupoAptoParaLebennin()   
     }
 }
 
@@ -265,7 +267,7 @@ object tieneArmas inherits Requerimiento {
 
     override method tipoRequerimiento() = 2
 
-    method tieneArmas(grupoGuerreros) {
-      grupoGuerreros.find({ guerrero => guerrero.armas().size() > 0 })
-    } 
+    method evaluarRequerimiento(grupoGuerreros) {
+     return grupoGuerreros.grupoAptoParabosqueDeFangorn()
+     } 
 }

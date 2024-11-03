@@ -191,9 +191,12 @@ describe "Tests de Caminos" {
   }
 
   test "Un grupo no puede pasar por una zona por requerimiento de guerrero" {
-    assert.equals(false, grupoGuerreros2.grupoAptoParaLebennin())
+    assert.equals(false, lebenninZona.requerimiento().evaluarRequerimiento(grupoGuerreros2))
   }
 
+//  test "Un grupo puede entrar al bosque"{
+//    assert.equals(true, bosqueDeFangornZona.requerimiento().evaluarRequerimiento(grupoGuerreros2))
+//  }
    test "Un grupo puede pasar por una zona" {
     assert.equals(true, edorasZona.requerimiento().tipoRequerimiento() == 0)
   }
