@@ -194,8 +194,9 @@ class GrupoGuerreros {
     
     // method agregarGuerrero(guerrero) = guerreros.add(guerrero)
 
-    method obtenerCantidadTotalItem(itemAEvaluar) = guerreros.sum({ 
-        guerrero => guerrero.obtenerCantidadItemIGuales(itemAEvaluar)})
+    method grupoCuentaConItems(cantidadRequerida, itemAEvaluar) = (guerreros.sum({ 
+        guerrero => guerrero.obtenerCantidadItemIGuales(itemAEvaluar)}) - cantidadRequerida >= 0 
+        )
     
     method grupoAptoParaLebennin() = guerreros.any({
       guerrero => guerrero.poder() == poderMilQuinientos.obtenerRequerimientoPoder()
@@ -208,6 +209,7 @@ class GrupoGuerreros {
     
     // method recorrerCaminos(camino) = caminosRecorridos.add(camino)
     // method puedeAtravesarCamino(camino) = camino.zonas().all({ zona => zona.puedePasarZona(self)})
+    
 }
 
 // Modelo region y zona
@@ -226,6 +228,8 @@ class Zona {
     // method asignarRequerimiento(_requerimiento) = _requerimiento
 
     method region(_region) { region = _region }
+
+    
 }
 
 //Modelos Requerimientos
@@ -242,6 +246,10 @@ class RequerimientoItem inherits Requerimiento {
     var property nombre  
 
     override method tipoRequerimiento() = 1
+
+    method evaluarRequerimiento(grupoGuerreros) {
+      return grupoGuerreros.grupoCuentaConItems(cantidad, nombre)
+    }
 }
 
 //Modelo caminos
@@ -249,6 +257,10 @@ class Camino {
     var property zonas = []
 
     // method agregarZona(_zona) = zonas.add(_zona)
+
+    method puedeAtravesarCamino(grupoGuerreros) {
+      return zonas.all({ zona => zona.requerimiento().evaluarRequerimiento(grupoGuerreros) })
+    }
 }
 
 // Requerimientos de guerreros

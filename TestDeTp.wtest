@@ -187,7 +187,7 @@ const grupoGuerreros3 = new GrupoGuerreros(guerreros = [frodo1, gimil1, legolas1
 
 describe "Tests de Caminos" {
   test "Un grupo no puede pasar por una zona por requerimiento de item" {
-    assert.equals(false, grupoGuerreros1.obtenerCantidadTotalItem(minasTirithZona.requerimiento().nombre()) > minasTirithZona.requerimiento().cantidad())
+    assert.equals(false, minasTirithZona.requerimiento().evaluarRequerimiento(grupoGuerreros1))
   }
 
   test "Un grupo no puede pasar por una zona por requerimiento de guerrero" {
@@ -201,10 +201,11 @@ describe "Tests de Caminos" {
     assert.equals(true, edorasZona.requerimiento().tipoRequerimiento() == 0)
   }
 
-//   test "Un grupo no puede atravesar un camino" {
-    
-//   }
+   test "Un grupo no puede atravesar un camino" {
+     assert.equals(false, camino.puedeAtravesarCamino(grupoGuerreros2)) 
+   }
 
 //   test "Un grupo puede atravesar un camino" {
+//     assert.equals(true, camino.puedeAtravesarCamino(grupoGuerreros1)) 
 //   }
 }
