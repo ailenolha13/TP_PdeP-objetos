@@ -236,7 +236,9 @@ class Zona {
 class Requerimiento {
     //0: sin requerimientos; 1: requerimiento item; 2: requerimiento guerrero
     var property tipoRequerimiento = 0  
-  
+    method evaluarRequerimiento(grupoGuerreros){
+      return true
+    }
 }
 
 
@@ -247,7 +249,7 @@ class RequerimientoItem inherits Requerimiento {
 
     override method tipoRequerimiento() = 1
 
-    method evaluarRequerimiento(grupoGuerreros) {
+    override method evaluarRequerimiento(grupoGuerreros) {
       return grupoGuerreros.grupoCuentaConItems(cantidad, nombre)
     }
 }
@@ -270,7 +272,7 @@ object poderMilQuinientos inherits Requerimiento {
 
     override method tipoRequerimiento() = 2
 
-    method evaluarRequerimiento(grupoGuerreros) { 
+    override method evaluarRequerimiento(grupoGuerreros) { 
       return grupoGuerreros.grupoAptoParaLebennin()   
     }
 }
@@ -279,7 +281,7 @@ object tieneArmas inherits Requerimiento {
 
     override method tipoRequerimiento() = 2
 
-    method evaluarRequerimiento(grupoGuerreros) {
+    override method evaluarRequerimiento(grupoGuerreros) {
      return grupoGuerreros.grupoAptoParabosqueDeFangorn()
      } 
 }

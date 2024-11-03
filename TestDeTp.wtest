@@ -205,7 +205,7 @@ describe "Tests de Caminos" {
      assert.equals(false, camino.puedeAtravesarCamino(grupoGuerreros2)) 
    }
 
-//   test "Un grupo puede atravesar un camino" {
-//     assert.equals(true, camino.puedeAtravesarCamino(grupoGuerreros1)) 
-//   }
+   test "Un grupo puede atravesar un camino" {
+     assert.equals(true, camino.puedeAtravesarCamino(grupoGuerreros3)) 
+   }
 }
