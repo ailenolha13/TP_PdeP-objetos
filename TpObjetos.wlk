@@ -42,22 +42,21 @@ object baston {
 // Recorriendo la Tierra Media
 // Zonas de la Tierra Media
 //Conceptos utilizados: encapsulamiento, abstracción, polimorfismo y delegación 
-object lebennin {
-    const property poderRequerido = 1500
+object lebennin{
+  const property poderRequerido = 1500
 
-    method atravesarZona(personaje) = personaje.poder() > poderRequerido
-    method recorrerZona(personaje) {}
+  method atravesarZona(personaje) = personaje.poder() > poderRequerido
+  method recorrerZona(personaje) {}
 }
 
-object minasTirith {
-
-    method atravesarZona(personaje) =  personaje.tieneArmas()
-    method recorrerZona(personaje) {
-        personaje.vida(personaje.vida()-10)
-    } 
+object minasTirith{
+  method atravesarZona(personaje) =  personaje.tieneArmas()
+  method recorrerZona(personaje) {
+    personaje.vida(personaje.vida()-10)
+  }
 }
 
-object lossarnach {
+object lossarnach{
     method atravesarZona(personaje) = true
     method recorrerZona(personaje) {
         personaje.vida(personaje.vida()+1)
@@ -143,6 +142,23 @@ class Guerrero {
   method cantItems() = (items.size())
   method obtenerCantidadItemIGuales(itemAEvaluar) = items.filter({ 
     item => item == itemAEvaluar }).size()
+  
+  // Chequear si se puede mejorar esto de modificarVida
+  method modificarVida(efectoVida) {
+    vida = vida + efectoVida
+    if (vida < 0) {
+      vida = 0
+    }
+  }
+  method estaFueraDeCombate() = vida == 0
+
+  method ganarItem(item, cantidad) {
+    items.addAll(cantidad, item)
+  }
+
+  method perderItem(item, cantidad) {
+    items.removeAll(item, cantidad)
+  }
 }
 
 class Hobbit inherits Guerrero {
@@ -190,9 +206,9 @@ object gollum inherits Hobbit {
 //Los caminos de la tierra media
 class GrupoGuerreros {
     var property guerreros = #{} 
-    var property caminosRecorridos = [] 
-    
-    // method agregarGuerrero(guerrero) = guerreros.add(guerrero)
+    var property caminosRecorridos = []
+    var property vida = 0
+    var property items = []
 
     method grupoCuentaConItems(cantidadRequerida, itemAEvaluar) = (guerreros.sum({ 
         guerrero => guerrero.obtenerCantidadItemIGuales(itemAEvaluar)}) - cantidadRequerida >= 0 
@@ -207,29 +223,31 @@ class GrupoGuerreros {
       guerrero => guerrero.armas().size() > 0 }
       )
     
-    // method recorrerCaminos(camino) = caminosRecorridos.add(camino)
-    // method puedeAtravesarCamino(camino) = camino.zonas().all({ zona => zona.puedePasarZona(self)})
-    
 }
 
-// Modelo region y zona
+// Modelo region
 class Region {
     var property nombre 
     var property zonas = #{} 
-
-    // method agregarZona(_zona) = zonas.add(_zona)
 }
 
+// Modelamos Zona
 class Zona {
     var property nombre
     var property requerimiento 
-    var region  
-
-    // method asignarRequerimiento(_requerimiento) = _requerimiento
-
+    var region
+    var property efecto
+    
     method region(_region) { region = _region }
 
-    
+    method puedeAtravesarZona(grupoGuerreros) = requerimiento.evaluarRequerimiento(grupoGuerreros)
+
+    method intentarAtravesarZona(grupoGuerreros) {
+      if (!self.puedeAtravesarZona(grupoGuerreros)) {
+        throw new Exception(message = 'El grupo de guerreros no cumple con los requisitos para atravesar esta zona')
+      }
+      efecto.aplicar(grupoGuerreros)
+    }
 }
 
 //Modelos Requerimientos
@@ -240,7 +258,6 @@ class Requerimiento {
       return true
     }
 }
-
 
 //Modelos Requerimiento Item
 class RequerimientoItem inherits Requerimiento { 
@@ -281,7 +298,45 @@ object tieneArmas inherits Requerimiento {
 
     override method tipoRequerimiento() = 2
 
+  // No conviene encapsular aca tambien y usar solo la lista de guerreros para los requerimientos?
+  // Como con los efectos, no es necesario saber el detalle del resto de la clase
     override method evaluarRequerimiento(grupoGuerreros) {
      return grupoGuerreros.grupoAptoParabosqueDeFangorn()
-     } 
+     }
+}
+
+// Para modelar los efectos hacemos que directamente le pasen por parametro el listado de guerreros
+// Esto es asi para encapsular los detalles del grupo de guerreros
+// Los efectos no tienen por que saber el resto de detalles
+class Efecto {
+  method aplicar(grupoGuerreros) {}
+}
+
+class EfectoVida inherits Efecto{
+  var property variacionVida = 0
+
+  override method aplicar(grupoGuerreros) {
+    grupoGuerreros.forEach({ guerrero => 
+        if (!guerrero.estaFueraDeCombate()) {
+            guerrero.modificarVida(variacionVida)
+        }
+    })
+  }
+}
+
+class EfectoItem inherits Efecto{
+  var property item
+  var property cantidad
+
+  override method aplicar(grupoGuerreros) {
+    grupoGuerreros.forEach({ guerrero => 
+        if (!guerrero.estaFueraDeCombate()) {
+            if (cantidad > 0) {
+                guerrero.agregarItem(item, cantidad)
+            } else {
+                guerrero.quitarItem(item, -cantidad)
+            }
+        }
+    })
+  }
 }
