@@ -207,8 +207,6 @@ object gollum inherits Hobbit {
 class GrupoGuerreros {
     var property guerreros = #{} 
     var property caminosRecorridos = []
-    var property vida = 0
-    var property items = []
 
     method grupoCuentaConItems(cantidadRequerida, itemAEvaluar) = (guerreros.sum({ 
         guerrero => guerrero.obtenerCantidadItemIGuales(itemAEvaluar)}) - cantidadRequerida >= 0 
