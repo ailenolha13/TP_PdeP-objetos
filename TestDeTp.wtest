@@ -103,6 +103,7 @@ describe "Tests de Tom Bombadil" {
   const legolas = new Elfo(vida=80,armas=[arco1,espada3],destrezaPropia=1)
   const aragorn = new Humano(vida=85,armas=[anduril,daga2],limitador=20)
   const _gandalf = new Maiar(vida=100,armas=[glamdring,baculo1])
+  const boromir = new Humano(vida=20,armas=[daga2],limitador=0)
 
 describe "Test de armas" {
   test "Espada con multiplicador de 15 y de origen Enano" {
@@ -156,19 +157,20 @@ const diezLembas = new RequerimientoItem(cantidad = 10, nombre = "Lembas")
 //Region Gondor
 const gondorRegion = new Region(nombre = "Gondor")
 //Zona Gondor
-const belfalasZona = new Zona(nombre = "Belfalas", requerimiento = sinRequerimiento, region = gondorRegion)
-const lebenninZona = new Zona(nombre = "Lebennin", requerimiento = poderMilQuinientos, region = gondorRegion)
+const belfalasZona = new Zona(nombre = "Belfalas", requerimiento = sinRequerimiento, region = gondorRegion, efecto = new EfectoItem(item = 'Pan de lembas', cantidad = 1))
+const lebenninZona = new Zona(nombre = "Lebennin", requerimiento = poderMilQuinientos, region = gondorRegion, efecto = null)
 const minasTirithZona = new Zona(nombre = "Minas Tirith", requerimiento = diezLembas,
-region = gondorRegion)
+region = gondorRegion, efecto = new EfectoVida(variacionVida = -15))
 
 //Requerimientos Item: Rohan
 const tresCapasElficas = new RequerimientoItem(cantidad = 3, nombre = "Capas Elficas")
 //Region Rohan
 const rohanRegion = new Region(nombre = "Rohan")
 //Zona Rohan
-const bosqueDeFangornZona = new Zona(nombre = "Bosque de Fangorn", requerimiento = tieneArmas, region = rohanRegion)
-const edorasZona = new Zona(nombre = "Edoras", requerimiento = sinRequerimiento, region = rohanRegion)
-const estemnetZona = new Zona(nombre = "Estemnet", requerimiento = tresCapasElficas, region = rohanRegion)
+const bosqueDeFangornZona = new Zona(nombre = "Bosque de Fangorn", requerimiento = tieneArmas, region = rohanRegion, efecto = new EfectoItem(item = 'Capas Elficas', cantidad = -1))
+const edorasZona = new Zona(nombre = "Edoras", requerimiento = sinRequerimiento, region = rohanRegion, efecto = new EfectoItem(item = 'Vino caliente', cantidad = 1))
+const estemnetZona = new Zona(nombre = "Estemnet", requerimiento = tresCapasElficas, region = rohanRegion, efecto = new EfectoVida(variacionVida = 2))
+const parthGalen = new Zona(nombre = 'Parth Galen', requerimiento = sinRequerimiento, region = rohanRegion, efecto = new EfectoVida(variacionVida = -21))
 
 //Camino
 const camino = new Camino(zonas = [bosqueDeFangornZona, edorasZona, belfalasZona, minasTirithZona])
@@ -184,6 +186,7 @@ const _gandalf1 = new Maiar(vida=100,armas=[glamdring,baculo1], items=["Capas El
 const grupoGuerreros1 = new GrupoGuerreros(guerreros = [frodo1, gimil1, legolas1, aragorn1], caminosRecorridos = camino)
 const grupoGuerreros2 = new GrupoGuerreros(guerreros = [_gandalf1], caminosRecorridos = camino)
 const grupoGuerreros3 = new GrupoGuerreros(guerreros = [frodo1, gimil1, legolas1, aragorn1, _gandalf1], caminosRecorridos = camino)
+const grupoGuerreros4 = new GrupoGuerreros(guerreros = [boromir])
 
 describe "Tests de Caminos" {
   test "Un grupo no puede pasar por una zona por requerimiento de item" {
@@ -208,4 +211,24 @@ describe "Tests de Caminos" {
    test "Un grupo puede atravesar un camino" {
      assert.equals(true, camino.puedeAtravesarCamino(grupoGuerreros3)) 
    }
+}
+
+describe "Tests de Efectos de Zonas" {
+  test "Un grupo que no puede atravesar una zona, produce un error al intentar pasar." {
+    assert.throwsException(minasTirithZona.intentarAtravesarZona(grupoGuerreros4.guerreros()))
+  }
+
+  test "Un integrante sufre las consecuencias de pérdida de ítem, al atravesar una zona con tal efecto." {
+    bosqueDeFangornZona.intentarAtravesarZona(grupoGuerreros4.guerreros())
+    assert.equals(false, grupoGuerreros3.guerreros().any({guerrero => guerrero.item() == 'Capas Elficas'}))
+  }
+  test "Un integrante no pierde ningún ítem, debido a que no lo posee." {
+    const itemsIniciales = boromir.items()
+    bosqueDeFangornZona.intentarAtravesarZona(grupoGuerreros4.guerreros())
+    assert.equals(itemsIniciales, boromir.items())
+  }
+  test "Boromir, queda fuera de combate luego de atravesar Parth Galen." {
+    parthGalen.intentarAtravesarZona(grupoGuerreros4.guerreros())
+    assert.equals(true, boromir.estaFueraDeCombate())
+  }
 }
