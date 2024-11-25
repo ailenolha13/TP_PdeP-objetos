@@ -140,9 +140,13 @@ class Guerrero {
   var property items = [] 
   method poderArmas() = (armas.sum({arma=> arma.poder()}))
   method cantItems() = (items.size())
-  method obtenerCantidadItemIGuales(itemAEvaluar) = items.filter({ 
+  method obtenerCantidadItemIguales(itemAEvaluar) = 
+  if(items.any({item => item == itemAEvaluar})){
+  items.filter({ 
     item => item == itemAEvaluar }).size()
-  
+  }else{
+    return 0
+  }
   // Chequear si se puede mejorar esto de modificarVida
   method modificarVida(efectoVida) {
     vida = vida + efectoVida
@@ -152,13 +156,32 @@ class Guerrero {
   }
   method estaFueraDeCombate() = vida == 0
 
-  method ganarItem(item, cantidad) {
-    items.addAll(cantidad, item)
+  method agregarItem(item, cantidad) {
+    const itemsCant = [item].repeat(cantidad)
+    items.addAll(itemsCant)
   }
 
-  method perderItem(item, cantidad) {
-    items.removeAll(item, cantidad)
-  }
+  method quitarItem(item, cantidad) {
+    const itemsAEliminar = items.filter({itemAEvaluar => itemAEvaluar == item})
+    const cantidadAux = cantidad.abs()
+    var eliminados = 0
+    
+    if(itemsAEliminar.size() >= cantidadAux){
+      itemsAEliminar.forEach({ itemAEliminar =>
+            if (eliminados < cantidadAux) {
+                items.remove(itemAEliminar)
+                eliminados = eliminados + 1
+            }
+        })
+    }else{
+    itemsAEliminar.forEach({ itemAEliminar =>
+            if (eliminados < itemsAEliminar.size()) {
+                items.remove(itemAEliminar)
+                eliminados = eliminados + 1
+            }
+        })
+    }
+}
 }
 
 class Hobbit inherits Guerrero {
@@ -209,7 +232,7 @@ class GrupoGuerreros {
     var property caminosRecorridos = []
 
     method grupoCuentaConItems(cantidadRequerida, itemAEvaluar) = (guerreros.sum({ 
-        guerrero => guerrero.obtenerCantidadItemIGuales(itemAEvaluar)}) - cantidadRequerida >= 0 
+        guerrero => guerrero.obtenerCantidadItemIguales(itemAEvaluar)}) - cantidadRequerida >= 0 
         )
     
     method grupoAptoParaLebennin() = guerreros.any({
@@ -314,7 +337,7 @@ class EfectoVida inherits Efecto{
   var property variacionVida = 0
 
   override method aplicar(grupoGuerreros) {
-    grupoGuerreros.forEach({ guerrero => 
+    grupoGuerreros.guerreros().forEach({ guerrero => 
         if (!guerrero.estaFueraDeCombate()) {
             guerrero.modificarVida(variacionVida)
         }
@@ -327,14 +350,14 @@ class EfectoItem inherits Efecto{
   var property cantidad
 
   override method aplicar(grupoGuerreros) {
-    grupoGuerreros.forEach({ guerrero => 
+    grupoGuerreros.guerreros().forEach({ guerrero => 
         if (!guerrero.estaFueraDeCombate()) {
             if (cantidad > 0) {
                 guerrero.agregarItem(item, cantidad)
             } else {
-                guerrero.quitarItem(item, -cantidad)
+                guerrero.quitarItem(item, cantidad)
             }
         }
     })
-  }
+  } 
 }

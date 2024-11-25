@@ -219,16 +219,17 @@ describe "Tests de Efectos de Zonas" {
   }
 
   test "Un integrante sufre las consecuencias de pérdida de ítem, al atravesar una zona con tal efecto." {
-    bosqueDeFangornZona.intentarAtravesarZona(grupoGuerreros4.guerreros())
-    assert.equals(false, grupoGuerreros3.guerreros().any({guerrero => guerrero.item() == 'Capas Elficas'}))
+    assert.equals(1,_gandalf1.obtenerCantidadItemIguales("Capas Elficas"))
+    bosqueDeFangornZona.intentarAtravesarZona(grupoGuerreros3)
+    assert.equals(0,_gandalf1.obtenerCantidadItemIguales("Capas Elficas"))
   }
   test "Un integrante no pierde ningún ítem, debido a que no lo posee." {
     const itemsIniciales = boromir.items()
-    bosqueDeFangornZona.intentarAtravesarZona(grupoGuerreros4.guerreros())
+    bosqueDeFangornZona.intentarAtravesarZona(grupoGuerreros4)
     assert.equals(itemsIniciales, boromir.items())
   }
   test "Boromir, queda fuera de combate luego de atravesar Parth Galen." {
-    parthGalen.intentarAtravesarZona(grupoGuerreros4.guerreros())
+    parthGalen.intentarAtravesarZona(grupoGuerreros4)
     assert.equals(true, boromir.estaFueraDeCombate())
   }
 }
