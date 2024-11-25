@@ -256,7 +256,7 @@ class Region {
 class Zona {
     var property nombre
     var property requerimiento 
-    var region
+    var property region
     var property efecto
     var property limitaCon = #{}
     
@@ -327,7 +327,19 @@ class Camino {
         if (!self.caminoValido()) {
         throw new Exception(message = 'El camino no es válido')
     }
-}   
+}
+
+    method regionesAtravezadas() {
+      const listaConDuplicados = zonas.map({zona => zona.region().nombre()})
+      const listaSinDuplicados = []
+
+      listaConDuplicados.forEach({
+        elemento => if(!listaSinDuplicados.contains(elemento)){
+          listaSinDuplicados.add(elemento)
+        }
+      })
+      return listaSinDuplicados
+    }
 }
 
 // Requerimientos de guerreros

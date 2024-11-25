@@ -240,5 +240,7 @@ describe "Test de caminos limitrofes" {
   test "Un grupo que quiere atravesar un camino inválido debe producir un error" {
     assert.throwsException({camino.intentarAtravezarCamino(grupoGuerreros3)})
   }
-  
+  test "Las regiones que atraviesan un camino dado"{
+    assert.equals(["Rohan", "Gondor"],camino1.regionesAtravezadas())
+  }
 }
