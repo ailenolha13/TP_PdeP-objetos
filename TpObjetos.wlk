@@ -358,16 +358,12 @@ object tieneArmas inherits Requerimiento {
 
     override method tipoRequerimiento() = 2
 
-  // No conviene encapsular aca tambien y usar solo la lista de guerreros para los requerimientos?
-  // Como con los efectos, no es necesario saber el detalle del resto de la clase
     override method evaluarRequerimiento(grupoGuerreros) {
      return grupoGuerreros.grupoAptoParabosqueDeFangorn()
      }
 }
 
-// Para modelar los efectos hacemos que directamente le pasen por parametro el listado de guerreros
-// Esto es asi para encapsular los detalles del grupo de guerreros
-// Los efectos no tienen por que saber el resto de detalles
+// Modelamos efecto
 class Efecto {
   method aplicar(grupoGuerreros) {}
 }
