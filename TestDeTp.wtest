@@ -215,7 +215,7 @@ describe "Tests de Caminos" {
 
 describe "Tests de Efectos de Zonas" {
   test "Un grupo que no puede atravesar una zona, produce un error al intentar pasar." {
-    assert.throwsException(minasTirithZona.intentarAtravesarZona(grupoGuerreros4.guerreros()))
+    assert.throwsException({minasTirithZona.intentarAtravesarZona(grupoGuerreros4)})
   }
 
   test "Un integrante sufre las consecuencias de pérdida de ítem, al atravesar una zona con tal efecto." {
