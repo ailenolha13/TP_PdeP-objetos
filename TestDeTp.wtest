@@ -157,8 +157,8 @@ const diezLembas = new RequerimientoItem(cantidad = 10, nombre = "Lembas")
 //Region Gondor
 const gondorRegion = new Region(nombre = "Gondor")
 //Zona Gondor
-const belfalasZona = new Zona(nombre = "Belfalas", requerimiento = sinRequerimiento, region = gondorRegion, efecto = new EfectoItem(item = 'Pan de lembas', cantidad = 1))
-const lebenninZona = new Zona(nombre = "Lebennin", requerimiento = poderMilQuinientos, region = gondorRegion, efecto = null)
+const belfalasZona = new Zona(nombre = "Belfalas", requerimiento = sinRequerimiento, region = gondorRegion, efecto = new EfectoItem(item = 'Pan de lembas', cantidad = 1), limitaCon = ["Lebennin","Lamedon"])
+const lebenninZona = new Zona(nombre = "Lebennin", requerimiento = poderMilQuinientos, region = gondorRegion, efecto = null, limitaCon = ["Belfalas", "Minas Tirith"])
 const minasTirithZona = new Zona(nombre = "Minas Tirith", requerimiento = diezLembas,
 region = gondorRegion, efecto = new EfectoVida(variacionVida = -15))
 
@@ -167,13 +167,15 @@ const tresCapasElficas = new RequerimientoItem(cantidad = 3, nombre = "Capas Elf
 //Region Rohan
 const rohanRegion = new Region(nombre = "Rohan")
 //Zona Rohan
-const bosqueDeFangornZona = new Zona(nombre = "Bosque de Fangorn", requerimiento = tieneArmas, region = rohanRegion, efecto = new EfectoItem(item = 'Capas Elficas', cantidad = -1))
-const edorasZona = new Zona(nombre = "Edoras", requerimiento = sinRequerimiento, region = rohanRegion, efecto = new EfectoItem(item = 'Vino caliente', cantidad = 1))
-const estemnetZona = new Zona(nombre = "Estemnet", requerimiento = tresCapasElficas, region = rohanRegion, efecto = new EfectoVida(variacionVida = 2))
+const bosqueDeFangornZona = new Zona(nombre = "Bosque de Fangorn", requerimiento = tieneArmas, region = rohanRegion, efecto = new EfectoItem(item = 'Capas Elficas', cantidad = -1), limitaCon = ["Edoras","Estemnet"])
+const edorasZona = new Zona(nombre = "Edoras", requerimiento = sinRequerimiento, region = rohanRegion, efecto = new EfectoItem(item = 'Vino caliente', cantidad = 1), limitaCon = ["Bosque de Fangorn","Estemnet","Lamedon"])
+const estemnetZona = new Zona(nombre = "Estemnet", requerimiento = tresCapasElficas, region = rohanRegion, efecto = new EfectoVida(variacionVida = 2), limitaCon = ["Edoras","Bosque de Fangorn"])
 const parthGalen = new Zona(nombre = 'Parth Galen', requerimiento = sinRequerimiento, region = rohanRegion, efecto = new EfectoVida(variacionVida = -21))
+const lamedon = new Zona(nombre = "Lamedon",requerimiento = sinRequerimiento, region = rohanRegion,efecto = null ,limitaCon = ["Edoras", "Belfalas"])
 
 //Camino
 const camino = new Camino(zonas = [bosqueDeFangornZona, edorasZona, belfalasZona, minasTirithZona])
+const camino1 = new Camino(zonas = [bosqueDeFangornZona, edorasZona, lamedon, belfalasZona, lebenninZona,minasTirithZona])
 
 // Guerreros
 const frodo1 = new Hobbit(vida=60,armas=[espada2], items=["Lembas","Lembas", "Capas Elficas", "Anillo Unico", "Hoja de Lorien", "Cota de Mithrill"])
@@ -232,4 +234,11 @@ describe "Tests de Efectos de Zonas" {
     parthGalen.intentarAtravesarZona(grupoGuerreros4)
     assert.equals(true, boromir.estaFueraDeCombate())
   }
+}
+
+describe "Test de caminos limitrofes" {
+  test "Un grupo que quiere atravesar un camino inválido debe producir un error" {
+    assert.throwsException({camino.intentarAtravezarCamino(grupoGuerreros3)})
+  }
+  
 }

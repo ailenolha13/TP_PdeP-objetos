@@ -258,6 +258,7 @@ class Zona {
     var property requerimiento 
     var region
     var property efecto
+    var property limitaCon = #{}
     
     method region(_region) { region = _region }
 
@@ -268,6 +269,9 @@ class Zona {
         throw new Exception(message = 'El grupo de guerreros no cumple con los requisitos para atravesar esta zona')
       }
       efecto.aplicar(grupoGuerreros)
+    }
+    method evaluaLimitrofe(zona1, zona2) {
+      return zona1.limitaCon().contains(zona2.nombre()) || zona2.limitaCon().contains(zona1.nombre())
     }
 }
 
@@ -301,6 +305,29 @@ class Camino {
     method puedeAtravesarCamino(grupoGuerreros) {
       return zonas.all({ zona => zona.requerimiento().evaluarRequerimiento(grupoGuerreros) })
     }
+
+    method caminoValido() {
+      var validez = true
+      var i = 0
+      zonas.forEach({
+        zona1 => 
+        if(i < zonas.size() - 1) {
+          const zona2 = zonas[i+1]
+          if(zonas.evaluaLimitrofe(zona1, zona2)){
+          validez = false
+          }
+        }
+      i = i+1
+      }
+      )
+      return validez
+    }
+
+     method intentarAtravezarCamino(grupoGuerreros) {
+        if (!self.caminoValido()) {
+        throw new Exception(message = 'El camino no es válido')
+    }
+}   
 }
 
 // Requerimientos de guerreros
