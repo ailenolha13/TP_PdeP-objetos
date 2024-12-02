@@ -140,14 +140,7 @@ class Guerrero {
   var property items = [] 
   method poderArmas() = (armas.sum({arma=> arma.poder()}))
   method cantItems() = (items.size())
-  method obtenerCantidadItemIguales(itemAEvaluar) = 
-  if(items.any({item => item == itemAEvaluar})){
-  items.filter({ 
-    item => item == itemAEvaluar }).size()
-  }else{
-    return 0
-  }
-  // Chequear si se puede mejorar esto de modificarVida
+
   method modificarVida(efectoVida) {
     vida = vida + efectoVida
     if (vida < 0) {
@@ -156,32 +149,22 @@ class Guerrero {
   }
   method estaFueraDeCombate() = vida == 0
 
-  method agregarItem(item, cantidad) {
-    const itemsCant = [item].repeat(cantidad)
-    items.addAll(itemsCant)
+  // Luego de la correcion parte 3 mejoramos el codigo para que no sea procedimental.
+  // Eliminamos el uso de variables auxiliares
+  // Nos aseguramos de delegar y dividir las responsabilidades de cada metodo, hacerlos reutilizables, y de no repetir logica
+
+  method ganarItem(item, cantidad) {
+    items.addAll(cantidad, item)
   }
 
-  method quitarItem(item, cantidad) {
-    const itemsAEliminar = items.filter({itemAEvaluar => itemAEvaluar == item})
-    const cantidadAux = cantidad.abs()
-    var eliminados = 0
-    
-    if(itemsAEliminar.size() >= cantidadAux){
-      itemsAEliminar.forEach({ itemAEliminar =>
-            if (eliminados < cantidadAux) {
-                items.remove(itemAEliminar)
-                eliminados = eliminados + 1
-            }
-        })
-    }else{
-    itemsAEliminar.forEach({ itemAEliminar =>
-            if (eliminados < itemsAEliminar.size()) {
-                items.remove(itemAEliminar)
-                eliminados = eliminados + 1
-            }
-        })
-    }
-}
+  method compararItems(itemAEvaluar, item) = itemAEvaluar == item
+  method filtrarItems(itemAEvaluar) = items.filter({item => self.compararItems(item, itemAEvaluar)})
+  method eliminarItems(itemsAEliminar, cantidad) = itemsAEliminar.take(cantidad).forEach({item => items.remove(item)})
+  method perderItem(itemAEliminar, cantidad) {
+    self.eliminarItems(self.filtrarItems(itemAEliminar), cantidad)
+  }
+
+  method obtenerCantidadItemIguales(itemAEvaluar) = self.filtrarItems(itemAEvaluar).size()
 }
 
 class Hobbit inherits Guerrero {
@@ -300,8 +283,6 @@ class RequerimientoItem inherits Requerimiento {
 class Camino {
     var property zonas = []
 
-    // method agregarZona(_zona) = zonas.add(_zona)
-
     method puedeAtravesarCamino(grupoGuerreros) {
       return zonas.all({ zona => zona.requerimiento().evaluarRequerimiento(grupoGuerreros) })
     }
@@ -364,6 +345,7 @@ object tieneArmas inherits Requerimiento {
 }
 
 // Modelamos efecto
+// Utilizamos clases y herencia, ya que de esta forma es mas robusto para el caso de que fuera necesario tener distintos tipos de efectos
 class Efecto {
   method aplicar(grupoGuerreros) {}
 }
@@ -388,9 +370,9 @@ class EfectoItem inherits Efecto{
     grupoGuerreros.guerreros().forEach({ guerrero => 
         if (!guerrero.estaFueraDeCombate()) {
             if (cantidad > 0) {
-                guerrero.agregarItem(item, cantidad)
+                guerrero.ganarItem(item, cantidad)
             } else {
-                guerrero.quitarItem(item, cantidad)
+                guerrero.perderItem(item, cantidad.abs())
             }
         }
     })
