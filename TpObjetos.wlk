@@ -149,23 +149,23 @@ class Guerrero {
   }
   method estaFueraDeCombate() = vida == 0
 
-  // Luego de la correcion parte 3 mejoramos el codigo para que no sea procedimental.
-  // Eliminamos el uso de variables auxiliares
-  // Nos aseguramos de delegar y dividir las responsabilidades de cada metodo, hacerlos reutilizables, y de no repetir logica
+  method ganarItem(item, cantidad) = cantidad.times({items.add(item)})
 
-  method ganarItem(item, cantidad) {
-    items.addAll(cantidad, item)
+  method encontrarItem(itemAEncontrar) = items.findOrElse({item => item == itemAEncontrar}, {"Item no encontrado"})
+  method eliminarItem(itemAEliminar) {
+    if (self.encontrarItem(itemAEliminar) == "Item no encontrado"){
+      return
+    } else {
+      items.remove(itemAEliminar)
+    }
   }
-
-  method compararItems(itemAEvaluar, item) = itemAEvaluar == item
-  method filtrarItems(itemAEvaluar) = items.filter({item => self.compararItems(item, itemAEvaluar)})
-  method eliminarItems(itemsAEliminar, cantidad) = itemsAEliminar.take(cantidad).forEach({item => items.remove(item)})
   method perderItem(itemAEliminar, cantidad) {
-    self.eliminarItems(self.filtrarItems(itemAEliminar), cantidad)
+    cantidad.times({items => self.eliminarItem(itemAEliminar)})
   }
 
-  method obtenerCantidadItemIguales(itemAEvaluar) = self.filtrarItems(itemAEvaluar).size()
+  method obtenerCantidadItemIguales(itemAEvaluar) = items.count({item => item == itemAEvaluar})
 }
+
 
 class Hobbit inherits Guerrero {
   method poder() = vida+self.poderArmas()+self.cantItems()
