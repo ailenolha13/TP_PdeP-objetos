@@ -296,30 +296,31 @@ class RequerimientoItem inherits Requerimiento {
 class Camino {
     var property zonas = []
 
+    method cantZonas() = zonas.size()
+
     method puedeAtravesarCamino(grupoGuerreros) {
       return zonas.all({ zona => zona.requerimiento().evaluarRequerimiento(grupoGuerreros) })
     }
 
-    method caminoValido() {
-      var validez = true
-      var i = 0
-      zonas.forEach({
-        zona1 => 
-        if(i < zonas.size() - 1) {
-          const zona2 = zonas[i+1]
-          if(zonas.evaluaLimitrofe(zona1, zona2)){
-          validez = false
-          }
-        }
-      i = i+1
-      }
-      )
-      return validez
-    }
+  method caminoValido() = self.compuestoPorZonasLimitrofes(0)
 
-     method intentarAtravezarCamino(grupoGuerreros) {
-        if (!self.caminoValido()) {
-        throw new Exception(message = 'El camino no es válido')
+  method obtenerZonaActual(indice) = zonas.get(indice)
+  method obtenerSiguienteZona(indice) = zonas.get(indice + 1)
+  method sonLimitrofes(indice) = zonas.evaluaLimitrofe(self.obtenerZonaActual(indice), self.obtenerSiguienteZona(indice))
+
+  method compuestoPorZonasLimitrofes(indice) {
+    if (indice >= (self.cantZonas() - 1)) { 
+      return true
+    }
+    if (!self.sonLimitrofes(indice)) {
+      return false
+    }
+    return self.compuestoPorZonasLimitrofes(indice + 1)
+  }
+
+  method intentarAtravezarCamino(grupoGuerreros) {
+    if (!self.caminoValido()) {
+      throw new Exception(message = 'El camino no es válido')
     }
 }
 
@@ -361,17 +362,16 @@ object tieneArmas inherits Requerimiento {
 // Utilizamos clases y herencia, ya que de esta forma es mas robusto para el caso de que fuera necesario tener distintos tipos de efectos
 class Efecto {
   method aplicar(grupoGuerreros) {}
+  method guerrerosEnCombate(guerreros) = guerreros.filter({guerrero => !guerrero.estaFueraDeCombate()})
 }
 
 class EfectoVida inherits Efecto{
   var property variacionVida = 0
 
+  method modificarVida(guerreros) = guerreros.forEach({guerrero => guerrero.modificarVida(variacionVida)})
+
   override method aplicar(grupoGuerreros) {
-    grupoGuerreros.guerreros().forEach({ guerrero => 
-        if (!guerrero.estaFueraDeCombate()) {
-            guerrero.modificarVida(variacionVida)
-        }
-    })
+    self.modificarVida(self.guerrerosEnCombate(grupoGuerreros.guerreros()))
   }
 }
 
@@ -379,15 +379,15 @@ class EfectoItem inherits Efecto{
   var property item
   var property cantidad
 
+  method aplicarAccion(guerrero) {
+    if (cantidad > 0) {
+      guerrero.ganarItem(item, cantidad)
+    } else {
+      guerrero.perderItem(item, cantidad.abs())
+    }
+  }
+
   override method aplicar(grupoGuerreros) {
-    grupoGuerreros.guerreros().forEach({ guerrero => 
-        if (!guerrero.estaFueraDeCombate()) {
-            if (cantidad > 0) {
-                guerrero.ganarItem(item, cantidad)
-            } else {
-                guerrero.perderItem(item, cantidad.abs())
-            }
-        }
-    })
-  } 
+    self.guerrerosEnCombate(grupoGuerreros.guerreros()).forEach({guerrero => self.aplicarAccion(guerrero)})
+  }
 }
