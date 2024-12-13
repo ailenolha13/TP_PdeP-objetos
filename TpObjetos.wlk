@@ -192,9 +192,9 @@ class Humano inherits Guerrero {
   method poder() {
     if (limitador == 0) {
       return 0
-    } else {
-      return vida * self.poderArmas()
     }
+    return vida * self.poderArmas()
+  
   }
 }
 
@@ -210,7 +210,13 @@ class Maiar inherits Guerrero {
 }
 
 object gollum inherits Hobbit {
-  override method poder() = (vida+self.poderArmas()+items/2)
+  override method poder() {
+    if(self.cantItems() == 0){
+      return super()
+    }
+    return super() / 2
+  }
+
 }
 
 //Conceptos utilizados:
