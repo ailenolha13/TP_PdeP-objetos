@@ -188,7 +188,14 @@ class Elfo inherits Guerrero {
 
 class Humano inherits Guerrero {
   var property limitador = 0
-  method poder() = vida*self.poderArmas()/limitador
+  
+  method poder() {
+    if (limitador == 0) {
+      return 0
+    } else {
+      return vida * self.poderArmas()
+    }
+  }
 }
 
 class Maiar inherits Guerrero {

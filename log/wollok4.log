@@ -591,3 +591,5 @@
 {"level":"info","message":"⌛ Building environment","timeElapsed":125,"timestamp":"2024-12-13T00:45:37.420Z"}
 {"level":"info","message":"⌛ Building environment","timeElapsed":139,"timestamp":"2024-12-13T00:45:37.705Z"}
 {"failures":[],"level":"info","message":"🧪 Test runner executed on c:\\Users\\ailen\\OneDrive\\Documentos\\Universidad\\2do\\PdeP\\Objetos\\TP\\tp-objetos-grupo-3-1","result":{"failed":0,"ok":4},"timeElapsed":561,"timestamp":"2024-12-13T00:45:48.059Z"}
+{"level":"info","message":"⌛ Building environment","timeElapsed":104,"timestamp":"2024-12-13T00:45:52.016Z"}
+{"level":"info","message":"⌛ Building environment","timeElapsed":117,"timestamp":"2024-12-13T00:45:52.249Z"}
