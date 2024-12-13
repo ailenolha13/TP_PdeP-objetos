@@ -151,7 +151,8 @@ class Guerrero {
 
   method ganarItem(item, cantidad) = cantidad.times({items.add(item)})
 
-  method encontrarItem(itemAEncontrar) = items.findOrElse({item => item == itemAEncontrar}, {"Item no encontrado"})
+  method itemIguales(item, itemAEvaluar) = item == itemAEvaluar
+  method encontrarItem(itemAEncontrar) = items.findOrElse({item => self.itemIguales(item, itemAEncontrar)}, {"Item no encontrado"})
   method eliminarItem(itemAEliminar) {
     if (self.encontrarItem(itemAEliminar) == "Item no encontrado"){
       return
@@ -163,7 +164,7 @@ class Guerrero {
     cantidad.times({items => self.eliminarItem(itemAEliminar)})
   }
 
-  method obtenerCantidadItemIguales(itemAEvaluar) = items.count({item => item == itemAEvaluar})
+  method obtenerCantidadItemIguales(itemAEvaluar) = items.count({item => self.itemIguales(item, itemAEvaluar)})
 }
 
 
